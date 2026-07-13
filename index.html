@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0e0f11">
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Running Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -24,30 +22,22 @@
     --mono: 'DM Mono', monospace;
     --sans: 'DM Sans', sans-serif;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; min-height: 100vh; overflow-x: hidden; }
-  .shell {
-    max-width: 900px; margin: 0 auto;
-    padding: 2rem 1.25rem;
-    padding-left: max(1.25rem, env(safe-area-inset-left));
-    padding-right: max(1.25rem, env(safe-area-inset-right));
-    padding-top: max(2rem, env(safe-area-inset-top));
-    padding-bottom: max(2rem, env(safe-area-inset-bottom));
-  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; min-height: 100vh; }
+  .shell { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem; }
 
   header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
   .logo-title { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: .15em; text-transform: uppercase; }
   .logo-name { font-size: 22px; font-weight: 500; color: var(--text); margin-top: 2px; }
-  .race-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-  .race-chip { background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: .6rem 1rem; text-align: right; flex: 1 1 auto; min-width: 108px; }
-  .race-chip .days { font-family: var(--mono); font-size: 28px; font-weight: 500; color: var(--accent); line-height: 1; }
-  .race-chip.chip-blue .days { color: var(--accent2); }
-  .race-chip .race-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .race-chip .race-name { font-size: 10px; color: var(--muted); margin-top: 3px; font-family: var(--mono); letter-spacing: .04em; }
+  .race-chips-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .race-chip { background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: .55rem .9rem; text-align: right; min-width: 92px; }
+  .race-chip.next { border-color: var(--accent); }
+  .race-chip .days { font-family: var(--mono); font-size: 24px; font-weight: 500; color: var(--accent); line-height: 1; }
+  .race-chip .race-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .race-chip .race-date { font-size: 9px; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
 
   .range-row { display: flex; gap: 6px; margin-bottom: 1.5rem; }
-  .range-btn { font-family: var(--mono); font-size: 11px; padding: 5px 12px; border-radius: 6px; border: 0.5px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; letter-spacing: .05em; }
+  .range-btn { font-family: var(--mono); font-size: 11px; padding: 5px 12px; border-radius: 6px; border: 0.5px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; letter-spacing: .05em; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .range-btn.on { background: var(--surface2); color: var(--text); border-color: var(--accent); }
 
   .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 2rem; }
@@ -60,8 +50,9 @@
   .metric-value.pink { color: var(--accent3); }
   .metric-value.orange { color: var(--accent4); }
 
-  .tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; flex-wrap: wrap; border-bottom: 0.5px solid var(--border); }
-  .tab { font-family: var(--mono); font-size: 11px; padding: 7px 14px; border-radius: 6px 6px 0 0; border: none; background: transparent; color: var(--muted); cursor: pointer; letter-spacing: .05em; text-transform: uppercase; border-bottom: 2px solid transparent; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; border-bottom: 0.5px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { font-family: var(--mono); font-size: 11px; padding: 9px 14px; border-radius: 6px 6px 0 0; border: none; background: transparent; color: var(--muted); cursor: pointer; letter-spacing: .05em; text-transform: uppercase; border-bottom: 2px solid transparent; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .tab.on { color: var(--text); border-bottom-color: var(--accent); }
 
   .chart-panel { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; }
@@ -102,7 +93,6 @@
   .bmx { background: #2a1a0a; color: var(--accent4); }
   .brs { background: #1e1e22; color: var(--muted); }
   .brc { background: #2a1205; color: var(--accent4); }
-  .bxt { background: #10233d; color: var(--accent2); }
   .bmissed { background: #2d0a0a; color: #f87171; }
   .bdone { background: #0d2e1e; color: var(--accent); }
   .plan-segs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
@@ -120,29 +110,28 @@
   .updated { font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: right; margin-bottom: 1rem; }
   .status { text-align: center; padding: 3rem; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 
+  .plan-done-btn, .plan-missed-btn, .plan-history-toggle { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+
   @media(max-width:600px) {
-    .shell { padding-left: max(.9rem, env(safe-area-inset-left)); padding-right: max(.9rem, env(safe-area-inset-right)); padding-top: max(1.25rem, env(safe-area-inset-top)); }
-    header { margin-bottom: 1.25rem; }
+    body { -webkit-text-size-adjust: 100%; }
+    .shell { padding: 1.25rem .85rem; }
     .logo-name { font-size: 19px; }
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-    .metric { padding: .75rem .8rem; }
+    .metrics { grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .metric-value { font-size: 20px; }
     .plan-card { flex-direction: column; gap: 6px; }
-    .race-chips { width: 100%; }
-    .race-chip { flex: 1 1 0; min-width: 0; padding: .55rem .7rem; }
-    .race-chip .days { font-size: 22px; }
-    .tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tab { flex: 0 0 auto; }
+    .plan-date-col { display: flex; gap: 6px; align-items: baseline; min-width: 0; }
     .chart-wrap { height: 190px; }
-    .act-row { gap: 8px; padding: .6rem .75rem; }
-    .act-type { min-width: 90px; font-size: 12px; }
+    .race-chip { min-width: 78px; padding: .45rem .7rem; }
+    .race-chip .days { font-size: 20px; }
+    .plan-done-btn, .plan-missed-btn { padding: 6px 12px; font-size: 11px; }
+    .tab { padding: 10px 12px; font-size: 10.5px; }
+    .act-row { padding: .6rem .7rem; }
+    .act-date { margin-left: 0; width: 100%; order: 5; }
   }
 
   @media(max-width:380px) {
-    .metrics { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .race-chip .days { font-size: 19px; }
-    .race-chip .race-label, .race-chip .race-name { font-size: 9px; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .race-chip .days { font-size: 18px; }
   }
 </style>
 </head>
@@ -154,18 +143,7 @@
       <div class="logo-title">Running dashboard</div>
       <div class="logo-name">Good morning 👋</div>
     </div>
-    <div class="race-chips">
-      <div class="race-chip">
-        <div class="days" id="daysLeft">—</div>
-        <div class="race-label" id="raceLabel">days to race</div>
-        <div class="race-name" id="raceName"></div>
-      </div>
-      <div class="race-chip chip-blue">
-        <div class="days" id="daysLeft2">—</div>
-        <div class="race-label" id="raceLabel2">days to race</div>
-        <div class="race-name" id="raceName2"></div>
-      </div>
-    </div>
+    <div class="race-chips-row" id="raceChips"></div>
   </header>
 
   <div class="updated" id="updatedLabel">Fetching data...</div>
@@ -196,3019 +174,201 @@
 </div>
 
 <script>
-const GH = 'https://raw.githubusercontent.com/123KingKarl123/garmin-data-xK9mP2qL7vR4nJ8w/main/';
-const FILES = ['activities.csv','daily_summaries.csv','sleep.csv','hrv.csv','resting_heart_rate.csv','stress.csv'];
-let D = {};
-let days = 30;
-let curTab = 'activities';
-let chart = null;
+/* ============================================================
+   DATA SOURCE
+   Your export script writes these CSV/JSON files straight into
+   the repo root. Since index.html lives in the SAME repo, we
+   fetch them as plain relative paths — no raw.githubusercontent
+   URL, no separate data repo, no auth needed.
+   ============================================================ */
+const FILES = ['activities.csv', 'sleep.csv', 'hrv.csv'];
+const TRAINING_STATUS_FILE = 'training_status.json';
 
 /* ============================================================
-   RACE CONFIG — edit this to match your race
+   RACES — add/edit events here. Order doesn't matter, the
+   dashboard sorts and shows the soonest upcoming one first.
    ============================================================ */
-const RACE = { title: 'Chester Metric Marathon', date: '2026-10-11', distance: '26km', paceTarget: 'Goal 2:30' };
-const RACE2 = { title: 'TCS London Marathon', date: '2027-04-25', distance: '42.2km', paceTarget: '7:06/km (sub-5:00)' };
+const RACES = [
+  { title: 'Chester Metric Marathon', short: 'Chester', date: '2026-10-11', distance: '26.2km', goal: 'Goal 2:30' },
+  { title: 'London Marathon', short: 'London', date: '2027-04-25', distance: '42.2km', goal: 'Sub-5:00 (7:06/km avg)' }
+];
 
 /* ============================================================
-   RACE PLAN — this is a SAMPLE structure only. Replace the
-   planWeeks array below with your own 20-week plan. Each day:
-   { date, day, type, badge, title, detail, segs:[...], km, note }
-   type controls the badge colour: bz2 (easy/aerobic/long/recovery),
-   bmx (tempo/interval/marathon-pace), brs (rest), brc (race day),
-   bxt (cross-training, e.g. Netball)
+   RACE PLAN
+   Two blocks: Chester Metric Marathon build (Jul–Oct 2026, 3
+   sessions/week: Mon/Thu/Sat) then London Marathon build
+   (Nov 2026–Apr 2027, 4 sessions/week: Mon/Wed/Thu/Sat).
+   Change PHASE1_START or LONDON_START below and every date in
+   that block recalculates automatically.
+   Each day: { date, day, type, badge, title, detail, segs:[...], km, note }
+   type controls the badge colour: bz2 (easy/long/aerobic), bmx
+   (tempo/intervals), brs (rest/very light), brc (race day)
    ============================================================ */
+function addDays(dateStr, n) {
+  const d = new Date(dateStr + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function dayName(dateStr) { return DAY_NAMES[new Date(dateStr + 'T00:00:00Z').getUTCDay()]; }
+function mkDay(date, type, badge, title, detail, km, segs, note) {
+  return { date, day: dayName(date), type, badge, title, detail, segs: segs || [], km: km || 0, note: note || '' };
+}
+function weekRangeLabel(monday) {
+  const fmt = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  return `${fmt(monday)}\u2013${fmt(addDays(monday, 6))}`;
+}
+/* Mon/Wed/Thu/Sat template used throughout the London block */
+function mkFourDayWeek(monday, phase, weekName, long, mon, wed, thu, note) {
+  return { label: `${phase} \u2014 ${weekName} \u2014 ${weekRangeLabel(monday)}`, phase, days: [
+    mkDay(monday, 'bz2', 'Easy', `Easy run \u2014 ${mon}km`, `${mon}km easy pace.`, mon, [`${mon}km easy`]),
+    mkDay(addDays(monday, 2), 'bz2', 'Recovery', `Recovery run \u2014 ${wed}km`, `${wed}km very easy recovery pace.`, wed, [`${wed}km recovery`]),
+    mkDay(addDays(monday, 3), 'bmx', 'Tempo', `Tempo run \u2014 ${thu}km`, `${thu}km at tempo effort.`, thu, [`${thu}km tempo`]),
+    mkDay(addDays(monday, 5), 'bz2', 'Long Run', `Long run \u2014 ${long}km`, `${long}km steady long run.`, long, [`${long}km long`], note || '')
+  ]};
+}
+
+/* ── Chester Metric Marathon build ── */
+const PHASE1_START = '2026-07-13'; // Monday, Week 1
+const wk = n => addDays(PHASE1_START, 7 * n);
+
+const chesterWeeks = [
+  { label: `Phase 1 \u2014 Week 1 \u2014 Base Build \u2014 ${weekRangeLabel(wk(0))}`, phase: 'Phase 1', days: [
+    mkDay(wk(0), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace.', 5, ['5km easy']),
+    mkDay(addDays(wk(0),3), 'bmx', 'Tempo', '6km \u2014 2km easy + 3km tempo + 1km easy', 'Warm up easy, 3km at tempo effort, cool down easy.', 6, ['2km easy','3km tempo','1km easy']),
+    mkDay(addDays(wk(0),5), 'bz2', 'Long Run', 'Long run \u2014 16km', '16km steady long run.', 16, ['16km long'])
+  ]},
+  { label: `Phase 1 \u2014 Week 2 \u2014 Base Build \u2014 ${weekRangeLabel(wk(1))}`, phase: 'Phase 1', days: [
+    mkDay(wk(1), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace.', 5, ['5km easy']),
+    mkDay(addDays(wk(1),3), 'bmx', 'Tempo', '7km \u2014 4km tempo', '7km total with 4km at tempo effort.', 7, ['3km easy','4km tempo']),
+    mkDay(addDays(wk(1),5), 'bz2', 'Long Run', 'Long run \u2014 17km', '17km steady long run.', 17, ['17km long'])
+  ]},
+  { label: `Phase 1 \u2014 Week 3 \u2014 Base Build \u2014 ${weekRangeLabel(wk(2))}`, phase: 'Phase 1', days: [
+    mkDay(wk(2), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace.', 6, ['6km easy']),
+    mkDay(addDays(wk(2),3), 'bmx', 'Intervals', '7km \u2014 5\u00d7800m tempo effort', '7km total including 5 x 800m at tempo effort with easy recovery.', 7, ['5x800m tempo']),
+    mkDay(addDays(wk(2),5), 'bz2', 'Long Run', 'Long run \u2014 18km', '18km steady long run.', 18, ['18km long'])
+  ]},
+  { label: `Phase 1 \u2014 Week 4 (Recovery) \u2014 Base Build \u2014 ${weekRangeLabel(wk(3))}`, phase: 'Phase 1', days: [
+    mkDay(wk(3), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace.', 5, ['5km easy']),
+    mkDay(addDays(wk(3),3), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace, no tempo this week.', 6, ['6km easy']),
+    mkDay(addDays(wk(3),5), 'bz2', 'Long Run', 'Long run \u2014 15km', '15km easy long run \u2014 recovery week.', 15, ['15km long'], 'Recovery week \u2014 keep effort easy across all three sessions.')
+  ]},
+  { label: `Phase 2 \u2014 Week 5 \u2014 Endurance Build \u2014 ${weekRangeLabel(wk(4))}`, phase: 'Phase 2', days: [
+    mkDay(wk(4), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace.', 6, ['6km easy']),
+    mkDay(addDays(wk(4),3), 'bmx', 'Tempo', 'Tempo run \u2014 8km', '8km at tempo effort.', 8, ['8km tempo']),
+    mkDay(addDays(wk(4),5), 'bz2', 'Long Run', 'Long run \u2014 19km', '19km steady long run.', 19, ['19km long'])
+  ]},
+  { label: `Phase 2 \u2014 Week 6 \u2014 Endurance Build \u2014 ${weekRangeLabel(wk(5))}`, phase: 'Phase 2', days: [
+    mkDay(wk(5), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace.', 6, ['6km easy']),
+    mkDay(addDays(wk(5),3), 'bmx', 'Tempo', '8km \u2014 4km tempo', '8km total with 4km at tempo effort.', 8, ['4km easy','4km tempo']),
+    mkDay(addDays(wk(5),5), 'bz2', 'Long Run', 'Long run \u2014 20km', '20km steady long run.', 20, ['20km long'])
+  ]},
+  { label: `Phase 2 \u2014 Week 7 \u2014 Endurance Build \u2014 ${weekRangeLabel(wk(6))}`, phase: 'Phase 2', days: [
+    mkDay(wk(6), 'bz2', 'Easy', 'Easy run \u2014 7km', '7km easy pace.', 7, ['7km easy']),
+    mkDay(addDays(wk(6),3), 'bmx', 'Intervals', '9km \u2014 6\u00d71km tempo', '9km total including 6 x 1km at tempo effort with easy recovery.', 9, ['6x1km tempo']),
+    mkDay(addDays(wk(6),5), 'bz2', 'Long Run', 'Long run \u2014 22km', '22km steady long run.', 22, ['22km long'])
+  ]},
+  { label: `Phase 2 \u2014 Week 8 (Recovery) \u2014 Endurance Build \u2014 ${weekRangeLabel(wk(7))}`, phase: 'Phase 2', days: [
+    mkDay(wk(7), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace.', 5, ['5km easy']),
+    mkDay(addDays(wk(7),3), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace, no tempo this week.', 6, ['6km easy']),
+    mkDay(addDays(wk(7),5), 'bz2', 'Long Run', 'Long run \u2014 18km', '18km easy long run \u2014 recovery week.', 18, ['18km long'], 'Recovery week \u2014 keep effort easy across all three sessions.')
+  ]},
+  { label: `Peak Phase \u2014 Week 9 \u2014 ${weekRangeLabel(wk(8))}`, phase: 'Peak Phase', days: [
+    mkDay(wk(8), 'bz2', 'Easy', 'Easy run \u2014 7km', '7km easy pace.', 7, ['7km easy']),
+    mkDay(addDays(wk(8),3), 'bmx', 'Tempo', 'Tempo run \u2014 9km', '9km at tempo effort.', 9, ['9km tempo']),
+    mkDay(addDays(wk(8),5), 'bz2', 'Long Run', 'Long run \u2014 23km', '23km steady long run.', 23, ['23km long'])
+  ]},
+  { label: `Peak Phase \u2014 Week 10 \u2014 ${weekRangeLabel(wk(9))}`, phase: 'Peak Phase', days: [
+    mkDay(wk(9), 'bz2', 'Easy', 'Easy run \u2014 7km', '7km easy pace.', 7, ['7km easy']),
+    mkDay(addDays(wk(9),3), 'bz2', 'Steady', 'Run \u2014 10km', '10km steady effort.', 10, ['10km steady']),
+    mkDay(addDays(wk(9),5), 'bz2', 'Long Run', 'Long run \u2014 24km', '24km steady long run.', 24, ['24km long'])
+  ]},
+  { label: `Peak Phase \u2014 Week 11 (Peak) \u2014 ${weekRangeLabel(wk(10))}`, phase: 'Peak Phase', days: [
+    mkDay(wk(10), 'bz2', 'Easy', 'Easy run \u2014 7km', '7km easy pace.', 7, ['7km easy']),
+    mkDay(addDays(wk(10),3), 'bmx', 'Goal Pace', '10km \u2014 5km at goal pace', '10km total including 5km at goal race pace.', 10, ['5km easy','5km @ goal pace']),
+    mkDay(addDays(wk(10),5), 'bz2', 'Long Run', 'Long run \u2014 26km', '26km \u2014 biggest long run of the block.', 26, ['26km long'], 'Peak week \u2014 highest volume before taper begins.')
+  ]},
+  { label: `Taper \u2014 Week 12 \u2014 ${weekRangeLabel(wk(11))}`, phase: 'Taper', days: [
+    mkDay(wk(11), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace.', 6, ['6km easy']),
+    mkDay(addDays(wk(11),3), 'bz2', 'Steady', 'Run \u2014 7km', '7km steady effort.', 7, ['7km steady']),
+    mkDay(addDays(wk(11),5), 'bz2', 'Long Run', 'Long run \u2014 18km', '18km \u2014 volume dropping into taper.', 18, ['18km long'])
+  ]},
+  { label: `Race Week \u2014 ${weekRangeLabel(wk(12))}`, phase: 'Race Week', days: [
+    mkDay(wk(12), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace, shake the legs out.', 5, ['5km easy']),
+    mkDay(addDays(wk(12),3), 'bz2', 'Strides', '4km with strides', '4km easy with a few relaxed strides to stay sharp.', 4, ['4km + strides']),
+    mkDay(addDays(wk(12),5), 'brs', 'Rest', 'Rest', 'Full rest \u2014 day before race day.', 0, []),
+    mkDay(addDays(wk(12),6), 'brc', 'Race Day', 'Chester Metric Marathon \u2014 26km', 'Race day. Goal: 2:30.', 26, ['26km race'], 'Goal 2:30.')
+  ]},
+  { label: `Recovery After Chester \u2014 Week 1 \u2014 ${weekRangeLabel(wk(13))}`, phase: 'Recovery', days: [
+    mkDay(wk(13), 'brs', 'Walk', 'Walk', 'Easy walk only \u2014 no running.', 0, ['Walk only']),
+    mkDay(addDays(wk(13),3), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace.', 5, ['5km easy']),
+    mkDay(addDays(wk(13),5), 'bz2', 'Easy', 'Easy run \u2014 8km', '8km easy pace.', 8, ['8km easy'])
+  ]},
+  { label: `Recovery After Chester \u2014 Week 2 \u2014 ${weekRangeLabel(wk(14))}`, phase: 'Recovery', days: [
+    mkDay(wk(14), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace.', 6, ['6km easy']),
+    mkDay(addDays(wk(14),3), 'bz2', 'Easy', 'Easy run \u2014 7km', '7km easy pace.', 7, ['7km easy']),
+    mkDay(addDays(wk(14),5), 'bz2', 'Long Run', 'Long run \u2014 12km', '12km easy long run.', 12, ['12km long'])
+  ]}
+];
+
+/* ── London Marathon build \u2014 4 sessions/week (Mon easy, Wed recovery,
+   Thu tempo/intervals, Sat long). Tue/Sun are netball, not logged here. ── */
+const LONDON_START = '2026-11-02'; // Monday \u2014 start of Marathon Base
+const lwk = n => addDays(LONDON_START, 7 * n);
+const rangeNote = r => `Source range: ${r} \u2014 adjust to how you feel.`;
+
+const marathonBaseData = [ // [long, mon, wed, thu]
+  [18,6,5,8], [19,6,5,8], [20,6,5,8], [21,7,6,9], [22,7,6,9], [23,7,6,9], [24,8,7,10], [24,8,7,10]
+];
+const marathonBaseWeeks = marathonBaseData.map((d, i) =>
+  mkFourDayWeek(lwk(i), 'Marathon Base', `Week ${i+1}`, d[0], d[1], d[2], d[3], rangeNote('6\u20138km easy / 5\u20137km recovery / 8\u201310km tempo / 18\u201324km long, weekly 40\u201348km'))
+);
+
+const JANUARY_START = '2027-01-04';
+const jwk = n => addDays(JANUARY_START, 7 * n);
+const januaryData = [ [24,8,6,10], [25,8,6,10], [26,8,6,10], [28,8,6,10] ];
+const januaryWeeks = januaryData.map((d, i) =>
+  mkFourDayWeek(jwk(i), 'January', `Week ${i+1}`, d[0], d[1], d[2], d[3], rangeNote('8km easy / 6km recovery / 10km tempo / 24\u201328km long, weekly 48\u201352km'))
+);
+
+const FEBRUARY_START = '2027-02-01';
+const fwk = n => addDays(FEBRUARY_START, 7 * n);
+const februaryData = [ [28,8,7,10], [29,8,7,11], [30,8,7,11], [32,8,7,12] ];
+const februaryWeeks = februaryData.map((d, i) =>
+  mkFourDayWeek(fwk(i), 'February', `Week ${i+1}`, d[0], d[1], d[2], d[3], i===3 ? 'Peak long run of the whole London block \u2014 32km.' : rangeNote('8km / 7km / 10\u201312km / 28\u201332km long, weekly 50\u201356km'))
+);
+
+const MARCH_START = '2027-03-01';
+const mwk = n => addDays(MARCH_START, 7 * n);
+const marchData = [ [30,8,7,11,''], [32,8,7,11,''], [26,6,5,8,'Recovery week \u2014 dialled back on purpose.'], [32,8,7,11,''] ];
+const marchWeeks = marchData.map((d, i) =>
+  mkFourDayWeek(mwk(i), 'March', `Week ${i+1}`, d[0], d[1], d[2], d[3], d[4] || rangeNote('alternating 30 / 32 / 26 (recovery) / 32km long, weekly 50\u201358km'))
+);
+
+const aprilTaperWeeks = [
+  mkFourDayWeek(addDays(MARCH_START, 28), 'April Taper', 'Three weeks out', 28, 6, 5, 6, 'Taper begins \u2014 volume easing off.'),
+  mkFourDayWeek(addDays(MARCH_START, 35), 'April Taper', 'Two weeks out', 20, 5, 4, 5, ''),
+  mkFourDayWeek(addDays(MARCH_START, 42), 'April Taper', 'One week out', 12, 4, 3, 4, '')
+];
+
+const londonRaceWeekMonday = addDays(MARCH_START, 49);
+const londonRaceWeek = { label: `London Race Week \u2014 ${weekRangeLabel(londonRaceWeekMonday)}`, phase: 'Race Week', days: [
+  mkDay(londonRaceWeekMonday, 'bz2', 'Easy', 'Easy run \u2014 4km', '4km easy pace.', 4, ['4km easy']),
+  mkDay(addDays(londonRaceWeekMonday,2), 'bz2', 'Shakeout', 'Shakeout \u2014 3km', '3km easy with a few strides.', 3, ['3km + strides']),
+  mkDay(addDays(londonRaceWeekMonday,3), 'brs', 'Rest', 'Rest', 'Full rest.', 0, []),
+  mkDay(addDays(londonRaceWeekMonday,4), 'brs', 'Rest', 'Rest', 'Full rest \u2014 day before race day.', 0, []),
+  mkDay(addDays(londonRaceWeekMonday,6), 'brc', 'Race Day', 'London Marathon \u2014 42.2km', 'Race day. Goal: sub-5:00 (7:06/km average).', 42.2, ['42.2km race'],
+    'Pacing plan \u2014 0\u201310km: 7:10/km, 10\u201325km: 7:05/km, 25\u201335km: 7:00/km, last 7km: hold whatever feels sustainable.')
+]};
+
 const planWeeks = [
-  {
-    "label": "Phase 1 \u2014 Week 1 \u2014 13\u201319 Jul",
-    "phase": "Phase 1 \u2014 Base Build",
-    "days": [
-      {
-        "date": "2026-07-13",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-07-16",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 6km",
-        "detail": "6km total: 2km easy, 3km tempo effort, 1km easy.",
-        "segs": [
-          "2km easy",
-          "3km tempo",
-          "1km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-07-18",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 16km",
-        "detail": "16km long run, steady aerobic effort.",
-        "segs": [
-          "16km long"
-        ],
-        "km": 16,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Phase 1 \u2014 Week 2 \u2014 20\u201326 Jul",
-    "phase": "Phase 1 \u2014 Base Build",
-    "days": [
-      {
-        "date": "2026-07-20",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-07-23",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 7km",
-        "detail": "7km total including 4km at tempo effort.",
-        "segs": [
-          "4km tempo"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-07-25",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 17km",
-        "detail": "17km long run, steady aerobic effort.",
-        "segs": [
-          "17km long"
-        ],
-        "km": 17,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Phase 1 \u2014 Week 3 \u2014 27 Jul \u2013 2 Aug",
-    "phase": "Phase 1 \u2014 Base Build",
-    "days": [
-      {
-        "date": "2026-07-27",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-07-30",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 7km",
-        "detail": "7km total including 5 x 800m at tempo effort with jog recovery.",
-        "segs": [
-          "5\u00d7800m tempo"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-08-01",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 18km",
-        "detail": "18km long run, steady aerobic effort.",
-        "segs": [
-          "18km long"
-        ],
-        "km": 18,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Phase 1 \u2014 Week 4 \u2014 Recovery \u2014 3\u20139 Aug",
-    "phase": "Phase 1 \u2014 Base Build",
-    "days": [
-      {
-        "date": "2026-08-03",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-08-06",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-08-08",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 15km",
-        "detail": "15km long run, steady aerobic effort.",
-        "segs": [
-          "15km long"
-        ],
-        "km": 15,
-        "note": "Recovery week \u2014 reduced volume."
-      }
-    ]
-  },
-  {
-    "label": "Phase 2 \u2014 Week 5 \u2014 10\u201316 Aug",
-    "phase": "Phase 2 \u2014 Endurance Build",
-    "days": [
-      {
-        "date": "2026-08-10",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-08-13",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 8km",
-        "detail": "8km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2026-08-15",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 19km",
-        "detail": "19km long run, steady aerobic effort.",
-        "segs": [
-          "19km long"
-        ],
-        "km": 19,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Phase 2 \u2014 Week 6 \u2014 17\u201323 Aug",
-    "phase": "Phase 2 \u2014 Endurance Build",
-    "days": [
-      {
-        "date": "2026-08-17",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-08-20",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 8km",
-        "detail": "8km total including 4km at tempo effort.",
-        "segs": [
-          "4km tempo"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2026-08-22",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 20km",
-        "detail": "20km long run, steady aerobic effort.",
-        "segs": [
-          "20km long"
-        ],
-        "km": 20,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Phase 2 \u2014 Week 7 \u2014 24\u201330 Aug",
-    "phase": "Phase 2 \u2014 Endurance Build",
-    "days": [
-      {
-        "date": "2026-08-24",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-08-27",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km total including 6 x 1km at tempo effort with jog recovery.",
-        "segs": [
-          "6\u00d71km tempo"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2026-08-29",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 22km",
-        "detail": "22km long run, steady aerobic effort.",
-        "segs": [
-          "22km long"
-        ],
-        "km": 22,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Phase 2 \u2014 Week 8 \u2014 Recovery \u2014 31 Aug \u2013 6 Sep",
-    "phase": "Phase 2 \u2014 Endurance Build",
-    "days": [
-      {
-        "date": "2026-08-31",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-09-03",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-09-05",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 18km",
-        "detail": "18km long run, steady aerobic effort.",
-        "segs": [
-          "18km long"
-        ],
-        "km": 18,
-        "note": "Recovery week \u2014 reduced volume."
-      }
-    ]
-  },
-  {
-    "label": "Peak Phase \u2014 Week 9 \u2014 7\u201313 Sep",
-    "phase": "Peak Phase",
-    "days": [
-      {
-        "date": "2026-09-07",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-09-10",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2026-09-12",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 23km",
-        "detail": "23km long run, steady aerobic effort.",
-        "segs": [
-          "23km long"
-        ],
-        "km": 23,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Peak Phase \u2014 Week 10 \u2014 14\u201320 Sep",
-    "phase": "Peak Phase",
-    "days": [
-      {
-        "date": "2026-09-14",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-09-17",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 10km",
-        "detail": "10km easy pace.",
-        "segs": [
-          "10km easy"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2026-09-19",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 24km",
-        "detail": "24km long run, steady aerobic effort.",
-        "segs": [
-          "24km long"
-        ],
-        "km": 24,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Peak Phase \u2014 Week 11 \u2014 Peak \u2014 21\u201327 Sep",
-    "phase": "Peak Phase",
-    "days": [
-      {
-        "date": "2026-09-21",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-09-24",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km total including 5km at goal race pace.",
-        "segs": [
-          "5km at goal pace"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2026-09-26",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 26km",
-        "detail": "26km long run, steady aerobic effort.",
-        "segs": [
-          "26km long"
-        ],
-        "km": 26,
-        "note": "Peak long run of the block."
-      }
-    ]
-  },
-  {
-    "label": "Taper \u2014 Week 12 \u2014 28 Sep \u2013 4 Oct",
-    "phase": "Taper",
-    "days": [
-      {
-        "date": "2026-09-28",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-10-01",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-10-03",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 18km",
-        "detail": "18km long run, steady aerobic effort.",
-        "segs": [
-          "18km long"
-        ],
-        "km": 18,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Race Week \u2014 5\u201311 Oct",
-    "phase": "Race Week",
-    "days": [
-      {
-        "date": "2026-10-05",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-10-08",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Strides",
-        "title": "Easy + strides \u2014 4km",
-        "detail": "4km easy with 4-6 x 20s strides.",
-        "segs": [
-          "4km + strides"
-        ],
-        "km": 4,
-        "note": ""
-      },
-      {
-        "date": "2026-10-10",
-        "day": "Sat",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-10-11",
-        "day": "Sun",
-        "type": "brc",
-        "badge": "Race Day",
-        "title": "Chester Metric Marathon",
-        "detail": "26km. Goal: 2:30.",
-        "segs": [],
-        "km": 26,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Recovery \u2014 Week 1 \u2014 12\u201318 Oct",
-    "phase": "Recovery \u2014 After Chester",
-    "days": [
-      {
-        "date": "2026-10-12",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Walk",
-        "title": "Walk",
-        "detail": "Easy walk \u2014 active recovery, no running.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-10-15",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-10-17",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Recovery \u2014 Week 2 \u2014 19\u201325 Oct",
-    "phase": "Recovery \u2014 After Chester",
-    "days": [
-      {
-        "date": "2026-10-19",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-10-22",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-10-24",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 12km",
-        "detail": "12km long run, steady aerobic effort.",
-        "segs": [
-          "12km long"
-        ],
-        "km": 12,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 1 \u2014 26 Oct \u2013 1 Nov",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-10-26",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-10-27",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-10-28",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 5km",
-        "detail": "5km very easy recovery pace.",
-        "segs": [
-          "5km recovery"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-10-29",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 8km",
-        "detail": "8km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2026-10-30",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-10-31",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 21km",
-        "detail": "21km long run, steady aerobic effort.",
-        "segs": [
-          "21km long"
-        ],
-        "km": 21,
-        "note": ""
-      },
-      {
-        "date": "2026-11-01",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 2 \u2014 2 Nov \u2013 8 Nov",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-11-02",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-11-03",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-04",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 5km",
-        "detail": "5km very easy recovery pace.",
-        "segs": [
-          "5km recovery"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-11-05",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 8km",
-        "detail": "8km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2026-11-06",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-07",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 22km",
-        "detail": "22km long run, steady aerobic effort.",
-        "segs": [
-          "22km long"
-        ],
-        "km": 22,
-        "note": ""
-      },
-      {
-        "date": "2026-11-08",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 3 \u2014 9 Nov \u2013 15 Nov",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-11-09",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-11-10",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-11",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-11-12",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2026-11-13",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-14",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 21km",
-        "detail": "21km long run, steady aerobic effort.",
-        "segs": [
-          "21km long"
-        ],
-        "km": 21,
-        "note": ""
-      },
-      {
-        "date": "2026-11-15",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 4 \u2014 16 Nov \u2013 22 Nov",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-11-16",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-11-17",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-18",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-11-19",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2026-11-20",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-21",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 21km",
-        "detail": "21km long run, steady aerobic effort.",
-        "segs": [
-          "21km long"
-        ],
-        "km": 21,
-        "note": ""
-      },
-      {
-        "date": "2026-11-22",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 5 \u2014 23 Nov \u2013 29 Nov",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-11-23",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-11-24",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-25",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-11-26",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2026-11-27",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-11-28",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 22km",
-        "detail": "22km long run, steady aerobic effort.",
-        "segs": [
-          "22km long"
-        ],
-        "km": 22,
-        "note": ""
-      },
-      {
-        "date": "2026-11-29",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 6 \u2014 30 Nov \u2013 6 Dec",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-11-30",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-12-01",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-02",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-12-03",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2026-12-04",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-05",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 23km",
-        "detail": "23km long run, steady aerobic effort.",
-        "segs": [
-          "23km long"
-        ],
-        "km": 23,
-        "note": ""
-      },
-      {
-        "date": "2026-12-06",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 7 \u2014 7 Dec \u2013 13 Dec",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-12-07",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-12-08",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-09",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-12-10",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2026-12-11",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-12",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 23km",
-        "detail": "23km long run, steady aerobic effort.",
-        "segs": [
-          "23km long"
-        ],
-        "km": 23,
-        "note": ""
-      },
-      {
-        "date": "2026-12-13",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 8 \u2014 14 Dec \u2013 20 Dec",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-12-14",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2026-12-15",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-16",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-12-17",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2026-12-18",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-19",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 22km",
-        "detail": "22km long run, steady aerobic effort.",
-        "segs": [
-          "22km long"
-        ],
-        "km": 22,
-        "note": ""
-      },
-      {
-        "date": "2026-12-20",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 9 \u2014 21 Dec \u2013 27 Dec",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-12-21",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2026-12-22",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-23",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 5km",
-        "detail": "5km very easy recovery pace.",
-        "segs": [
-          "5km recovery"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2026-12-24",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 8km",
-        "detail": "8km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2026-12-25",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-26",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 18km",
-        "detail": "18km long run, steady aerobic effort.",
-        "segs": [
-          "18km long"
-        ],
-        "km": 18,
-        "note": "Christmas week \u2014 reduced volume."
-      },
-      {
-        "date": "2026-12-27",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "London Marathon Build \u2014 Week 10 \u2014 28 Dec \u2013 3 Jan",
-    "phase": "London Marathon Build \u2014 Marathon Base (Nov\u2013Dec)",
-    "days": [
-      {
-        "date": "2026-12-28",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2026-12-29",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2026-12-30",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2026-12-31",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km including tempo or interval effort.",
-        "segs": [
-          "Tempo/Intervals"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2027-01-01",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-02",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 23km",
-        "detail": "23km long run, steady aerobic effort.",
-        "segs": [
-          "23km long"
-        ],
-        "km": 23,
-        "note": ""
-      },
-      {
-        "date": "2027-01-03",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "January \u2014 Week 1 \u2014 4 Jan \u2013 10 Jan",
-    "phase": "London Marathon Build \u2014 January",
-    "days": [
-      {
-        "date": "2027-01-04",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-01-05",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-06",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-01-07",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2027-01-08",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-09",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 24km",
-        "detail": "24km long run, steady aerobic effort.",
-        "segs": [
-          "24km long"
-        ],
-        "km": 24,
-        "note": ""
-      },
-      {
-        "date": "2027-01-10",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "January \u2014 Week 2 \u2014 11 Jan \u2013 17 Jan",
-    "phase": "London Marathon Build \u2014 January",
-    "days": [
-      {
-        "date": "2027-01-11",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-01-12",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-13",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-01-14",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2027-01-15",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-16",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 25km",
-        "detail": "25km long run, steady aerobic effort.",
-        "segs": [
-          "25km long"
-        ],
-        "km": 25,
-        "note": ""
-      },
-      {
-        "date": "2027-01-17",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "January \u2014 Week 3 \u2014 18 Jan \u2013 24 Jan",
-    "phase": "London Marathon Build \u2014 January",
-    "days": [
-      {
-        "date": "2027-01-18",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-01-19",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-20",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-01-21",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2027-01-22",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-23",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 26km",
-        "detail": "26km long run, steady aerobic effort.",
-        "segs": [
-          "26km long"
-        ],
-        "km": 26,
-        "note": ""
-      },
-      {
-        "date": "2027-01-24",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "January \u2014 Week 4 \u2014 25 Jan \u2013 31 Jan",
-    "phase": "London Marathon Build \u2014 January",
-    "days": [
-      {
-        "date": "2027-01-25",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-01-26",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-27",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-01-28",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2027-01-29",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-01-30",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 28km",
-        "detail": "28km long run, steady aerobic effort.",
-        "segs": [
-          "28km long"
-        ],
-        "km": 28,
-        "note": ""
-      },
-      {
-        "date": "2027-01-31",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "February \u2014 Week 1 \u2014 1 Feb \u2013 7 Feb",
-    "phase": "London Marathon Build \u2014 February",
-    "days": [
-      {
-        "date": "2027-02-01",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-02-02",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-03",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-02-04",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 10km",
-        "detail": "10km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 10,
-        "note": ""
-      },
-      {
-        "date": "2027-02-05",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-06",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 28km",
-        "detail": "28km long run, steady aerobic effort.",
-        "segs": [
-          "28km long"
-        ],
-        "km": 28,
-        "note": ""
-      },
-      {
-        "date": "2027-02-07",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "February \u2014 Week 2 \u2014 8 Feb \u2013 14 Feb",
-    "phase": "London Marathon Build \u2014 February",
-    "days": [
-      {
-        "date": "2027-02-08",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-02-09",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-10",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-02-11",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 11km",
-        "detail": "11km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 11,
-        "note": ""
-      },
-      {
-        "date": "2027-02-12",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-13",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 29km",
-        "detail": "29km long run, steady aerobic effort.",
-        "segs": [
-          "29km long"
-        ],
-        "km": 29,
-        "note": ""
-      },
-      {
-        "date": "2027-02-14",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "February \u2014 Week 3 \u2014 15 Feb \u2013 21 Feb",
-    "phase": "London Marathon Build \u2014 February",
-    "days": [
-      {
-        "date": "2027-02-15",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-02-16",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-17",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-02-18",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 11km",
-        "detail": "11km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 11,
-        "note": ""
-      },
-      {
-        "date": "2027-02-19",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-20",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 30km",
-        "detail": "30km long run, steady aerobic effort.",
-        "segs": [
-          "30km long"
-        ],
-        "km": 30,
-        "note": ""
-      },
-      {
-        "date": "2027-02-21",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "February \u2014 Week 4 \u2014 22 Feb \u2013 28 Feb",
-    "phase": "London Marathon Build \u2014 February",
-    "days": [
-      {
-        "date": "2027-02-22",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-02-23",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-24",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-02-25",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 12km",
-        "detail": "12km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 12,
-        "note": ""
-      },
-      {
-        "date": "2027-02-26",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-02-27",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 32km",
-        "detail": "32km long run, steady aerobic effort.",
-        "segs": [
-          "32km long"
-        ],
-        "km": 32,
-        "note": "Peak long run of the London block."
-      },
-      {
-        "date": "2027-02-28",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "March \u2014 Week 1 \u2014 1 Mar \u2013 7 Mar",
-    "phase": "London Marathon Build \u2014 March",
-    "days": [
-      {
-        "date": "2027-03-01",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-03-02",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-03",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-03-04",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 12km",
-        "detail": "12km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 12,
-        "note": ""
-      },
-      {
-        "date": "2027-03-05",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-06",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 30km",
-        "detail": "30km long run, steady aerobic effort.",
-        "segs": [
-          "30km long"
-        ],
-        "km": 30,
-        "note": ""
-      },
-      {
-        "date": "2027-03-07",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "March \u2014 Week 2 \u2014 8 Mar \u2013 14 Mar",
-    "phase": "London Marathon Build \u2014 March",
-    "days": [
-      {
-        "date": "2027-03-08",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-03-09",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-10",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-03-11",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 12km",
-        "detail": "12km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 12,
-        "note": ""
-      },
-      {
-        "date": "2027-03-12",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-13",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 32km",
-        "detail": "32km long run, steady aerobic effort.",
-        "segs": [
-          "32km long"
-        ],
-        "km": 32,
-        "note": ""
-      },
-      {
-        "date": "2027-03-14",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "March \u2014 Week 3 \u2014 15 Mar \u2013 21 Mar",
-    "phase": "London Marathon Build \u2014 March",
-    "days": [
-      {
-        "date": "2027-03-15",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-03-16",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-17",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 5km",
-        "detail": "5km very easy recovery pace.",
-        "segs": [
-          "5km recovery"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2027-03-18",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2027-03-19",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-20",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 26km",
-        "detail": "26km long run, steady aerobic effort.",
-        "segs": [
-          "26km long"
-        ],
-        "km": 26,
-        "note": "Recovery week \u2014 reduced volume."
-      },
-      {
-        "date": "2027-03-21",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "March \u2014 Week 4 \u2014 22 Mar \u2013 28 Mar",
-    "phase": "London Marathon Build \u2014 March",
-    "days": [
-      {
-        "date": "2027-03-22",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 8km",
-        "detail": "8km easy pace.",
-        "segs": [
-          "8km easy"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-03-23",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-24",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 7km",
-        "detail": "7km very easy recovery pace.",
-        "segs": [
-          "7km recovery"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-03-25",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 12km",
-        "detail": "12km including sustained tempo effort.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 12,
-        "note": ""
-      },
-      {
-        "date": "2027-03-26",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-27",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 32km",
-        "detail": "32km long run, steady aerobic effort.",
-        "segs": [
-          "32km long"
-        ],
-        "km": 32,
-        "note": ""
-      },
-      {
-        "date": "2027-03-28",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Taper \u2014 Three weeks out. \u2014 29 Mar \u2013 4 Apr",
-    "phase": "London Marathon Build \u2014 Taper",
-    "days": [
-      {
-        "date": "2027-03-29",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 7km",
-        "detail": "7km easy pace.",
-        "segs": [
-          "7km easy"
-        ],
-        "km": 7,
-        "note": ""
-      },
-      {
-        "date": "2027-03-30",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-03-31",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 6km",
-        "detail": "6km very easy recovery pace.",
-        "segs": [
-          "6km recovery"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-04-01",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 9km",
-        "detail": "9km easy-moderate, tempo effort mixed in.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 9,
-        "note": ""
-      },
-      {
-        "date": "2027-04-02",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-04-03",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 28km",
-        "detail": "28km long run, steady aerobic effort.",
-        "segs": [
-          "28km long"
-        ],
-        "km": 28,
-        "note": "Three weeks out."
-      },
-      {
-        "date": "2027-04-04",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Taper \u2014 Two weeks out. \u2014 5 Apr \u2013 11 Apr",
-    "phase": "London Marathon Build \u2014 Taper",
-    "days": [
-      {
-        "date": "2027-04-05",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 6km",
-        "detail": "6km easy pace.",
-        "segs": [
-          "6km easy"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-04-06",
-        "day": "Tue",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-04-07",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 5km",
-        "detail": "5km very easy recovery pace.",
-        "segs": [
-          "5km recovery"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2027-04-08",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 8km",
-        "detail": "8km easy-moderate, tempo effort mixed in.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 8,
-        "note": ""
-      },
-      {
-        "date": "2027-04-09",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-04-10",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 20km",
-        "detail": "20km long run, steady aerobic effort.",
-        "segs": [
-          "20km long"
-        ],
-        "km": 20,
-        "note": "Two weeks out."
-      },
-      {
-        "date": "2027-04-11",
-        "day": "Sun",
-        "type": "bxt",
-        "badge": "Cross-train",
-        "title": "Netball",
-        "detail": "Netball match / training \u2014 cross-training.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      }
-    ]
-  },
-  {
-    "label": "Taper \u2014 One week out. \u2014 12 Apr \u2013 18 Apr",
-    "phase": "London Marathon Build \u2014 Taper",
-    "days": [
-      {
-        "date": "2027-04-12",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2027-04-14",
-        "day": "Wed",
-        "type": "bz2",
-        "badge": "Recovery",
-        "title": "Recovery run \u2014 4km",
-        "detail": "4km very easy recovery pace.",
-        "segs": [
-          "4km recovery"
-        ],
-        "km": 4,
-        "note": ""
-      },
-      {
-        "date": "2027-04-15",
-        "day": "Thu",
-        "type": "bmx",
-        "badge": "Tempo",
-        "title": "Tempo session \u2014 6km",
-        "detail": "6km easy-moderate, tempo effort mixed in.",
-        "segs": [
-          "Tempo"
-        ],
-        "km": 6,
-        "note": ""
-      },
-      {
-        "date": "2027-04-16",
-        "day": "Fri",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-04-17",
-        "day": "Sat",
-        "type": "bz2",
-        "badge": "Long Run",
-        "title": "Long run \u2014 12km",
-        "detail": "12km long run, steady aerobic effort.",
-        "segs": [
-          "12km long"
-        ],
-        "km": 12,
-        "note": "One week out."
-      }
-    ]
-  },
-  {
-    "label": "Race Week \u2014 TCS London Marathon \u2014 19\u201325 Apr",
-    "phase": "Race Week",
-    "days": [
-      {
-        "date": "2027-04-19",
-        "day": "Mon",
-        "type": "bz2",
-        "badge": "Easy",
-        "title": "Easy run \u2014 5km",
-        "detail": "5km easy pace.",
-        "segs": [
-          "5km easy"
-        ],
-        "km": 5,
-        "note": ""
-      },
-      {
-        "date": "2027-04-22",
-        "day": "Thu",
-        "type": "bz2",
-        "badge": "Strides",
-        "title": "Easy + strides \u2014 4km",
-        "detail": "4km easy with 4-6 x 20s strides.",
-        "segs": [
-          "4km + strides"
-        ],
-        "km": 4,
-        "note": ""
-      },
-      {
-        "date": "2027-04-24",
-        "day": "Sat",
-        "type": "brs",
-        "badge": "Rest",
-        "title": "Rest",
-        "detail": "Full rest day.",
-        "segs": [],
-        "km": 0,
-        "note": ""
-      },
-      {
-        "date": "2027-04-25",
-        "day": "Sun",
-        "type": "brc",
-        "badge": "Race Day",
-        "title": "TCS London Marathon",
-        "detail": "42.2km. Goal: Sub-5:00 (avg 7:06/km). Pacing: 0-10km ~7:10/km, 10-25km ~7:05/km, 25-35km ~7:00/km, last 7km hold what feels sustainable.",
-        "segs": [],
-        "km": 42.2,
-        "note": ""
-      }
-    ]
-  }
+  ...chesterWeeks,
+  ...marathonBaseWeeks,
+  ...januaryWeeks,
+  ...februaryWeeks,
+  ...marchWeeks,
+  ...aprilTaperWeeks,
+  londonRaceWeek
 ];
 
 let D = { activities: [], sleep: [], hrv: [], trainingStatus: null };
@@ -3216,16 +376,21 @@ let days = 30;
 let curTab = 'activities';
 let chart = null;
 
-/* ── race countdown (supports multiple events) ── */
-const today0 = new Date(); today0.setHours(0,0,0,0);
-function renderCountdown(race, daysId, labelId, nameId) {
-  const daysLeft = Math.round((new Date(race.date) - today0) / 86400000);
-  document.getElementById(daysId).textContent = daysLeft >= 0 ? daysLeft : 0;
-  document.getElementById(labelId).textContent = daysLeft >= 0 ? 'days to go' : 'race day passed';
-  document.getElementById(nameId).textContent = race.title;
-}
-renderCountdown(RACE, 'daysLeft', 'raceLabel', 'raceName');
-renderCountdown(RACE2, 'daysLeft2', 'raceLabel2', 'raceName2');
+/* ── race countdowns (supports multiple events) ── */
+(function renderRaceChips() {
+  const today0 = new Date(); today0.setHours(0,0,0,0);
+  const withDays = RACES.map(r => ({ ...r, daysLeft: Math.round((new Date(r.date+'T00:00:00') - today0) / 86400000) }))
+    .sort((a,b) => a.daysLeft - b.daysLeft);
+  const nextIdx = withDays.findIndex(r => r.daysLeft >= 0);
+  document.getElementById('raceChips').innerHTML = withDays.map((r,i) => {
+    const dateFmt = new Date(r.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    return `<div class="race-chip${i===nextIdx?' next':''}">
+      <div class="days">${r.daysLeft >= 0 ? r.daysLeft : 'Done'}</div>
+      <div class="race-label">${r.daysLeft >= 0 ? 'days to' : ''} ${r.short}</div>
+      <div class="race-date">${dateFmt}</div>
+    </div>`;
+  }).join('');
+})();
 
 function localToday() {
   const now = new Date();
@@ -3236,31 +401,112 @@ function filterRows(rows, field, n) {
   const c = cutoff(n);
   return (rows||[]).filter(r => r[field] && new Date(r[field]) >= c).sort((a,b) => a[field] > b[field] ? 1 : -1);
 }
-function avg(arr) { const f = arr.filter(v => v !== undefined && v !== null); return f.length ? Math.round((f.reduce((a,b)=>a+b,0)/f.length)*10)/10 : 0; }
+function avg(arr) { const f = arr.filter(v => !isNaN(v)); return f.length ? Math.round((f.reduce((a,b)=>a+b,0)/f.length)*10)/10 : 0; }
+function findCol(row, opts) { if (!row) return null; for (const o of opts) if (row[o] !== undefined) return o; return null; }
+
+/* ── CSV parser (handles comma or tab separated, matches Garmin export format) ── */
+function parseCSV(txt) {
+  const lines = txt.trim().split('\n');
+  if (lines.length < 2) return [];
+  const delim = lines[0].includes('\t') ? '\t' : ',';
+  const hdrs = lines[0].split(delim).map(h => h.replace(/^"|"$/g,'').trim());
+  return lines.slice(1).map(line => {
+    if (delim === '\t') {
+      const vals = line.split('\t');
+      const o = {};
+      hdrs.forEach((h,i) => o[h] = (vals[i]||'').replace(/^"|"$/g,'').trim());
+      return o;
+    }
+    const vals = []; let cur = '', inQ = false;
+    for (const c of line) {
+      if (c === '"') inQ = !inQ;
+      else if (c === ',' && !inQ) { vals.push(cur); cur = ''; }
+      else cur += c;
+    }
+    vals.push(cur);
+    const o = {};
+    hdrs.forEach((h,i) => o[h] = (vals[i]||'').replace(/^"|"$/g,'').trim());
+    return o;
+  });
+}
+
+/* ── normalize raw Garmin CSV rows into the field names the dashboard uses ── */
+function normalizeActivities(rows) {
+  return rows.map(r => {
+    const type = (r.activityType_typeKey || r.activityType || r.activityName || 'activity');
+    return {
+      date: (r.startTimeLocal || '').slice(0,10),
+      type,
+      distanceKm: (parseFloat(r.distance) || 0) / 1000,
+      durationMin: (parseFloat(r.duration) || 0) / 60,
+      avgHr: r.averageHR ? Math.round(+r.averageHR) : null
+    };
+  }).filter(a => a.date);
+}
+function normalizeSleep(rows) {
+  const col = findCol(rows[0], ['sleepTimeSeconds','dailySleepDTO_sleepTimeSeconds','totalSleepTimeInSeconds']);
+  return rows.map(r => ({ date: r.date, hours: col ? +(+r[col]/3600).toFixed(1) : 0 })).filter(r => r.date);
+}
+function normalizeHRV(rows) {
+  return rows.map(r => ({
+    date: r.date,
+    value: +r['hrvSummary_lastNightAvg'] || 0,
+    weeklyAvg: +r['hrvSummary_weeklyAvg'] || 0,
+    baselineLow: +r['hrvSummary_baseline_balancedLow'] || 0,
+    baselineHigh: +r['hrvSummary_baseline_balancedUpper'] || 0
+  })).filter(r => r.date);
+}
+function normalizeTrainingStatus(d) {
+  if (!d) return null;
+  const deviceKey = Object.keys(d).find(k => k.includes('latestTrainingStatusData') && k.endsWith('trainingStatusFeedbackPhrase'));
+  const prefix = deviceKey ? deviceKey.replace('trainingStatusFeedbackPhrase','') : '';
+  const statusRaw = d[prefix + 'trainingStatusFeedbackPhrase'] || '';
+  const lbKey = Object.keys(d).find(k => k.includes('trainingBalanceFeedbackPhrase'));
+  const loadFocusRaw = lbKey ? d[lbKey] : '';
+  const acwrStatus = d[prefix + 'acuteTrainingLoadDTO_acwrStatus'] || '';
+  const statusLabels = { RECOVERY_1:'Recovery', RECOVERY_2:'Recovery', MAINTAINING_1:'Maintaining', MAINTAINING_2:'Maintaining', PRODUCTIVE_1:'Productive', PRODUCTIVE_2:'Productive', PEAKING_1:'Peaking', PEAKING_2:'Peaking', OVERREACHING_1:'Overreaching', OVERREACHING_2:'Overreaching', UNPRODUCTIVE:'Unproductive', DETRAINING:'Detraining' };
+  const loadLabels = { ANAEROBIC_SHORTAGE:'Anaerobic Shortage', ANAEROBIC_EXCESS:'Anaerobic Excess', AEROBIC_LOW_SHORTAGE:'Aerobic Low Shortage', AEROBIC_HIGH_SHORTAGE:'Aerobic High Shortage', AEROBIC_LOW_EXCESS:'Aerobic Low Excess', AEROBIC_HIGH_EXCESS:'Aerobic High Excess', OPTIMAL:'Optimal Balance', BALANCED:'Balanced' };
+  const titleCase = s => (s||'').replace(/_/g,' ').replace(/\w/g,c=>c.toUpperCase());
+  return {
+    statusLabel: statusLabels[statusRaw] || titleCase(statusRaw) || '—',
+    loadFocus: loadLabels[loadFocusRaw] || titleCase(loadFocusRaw) || '—',
+    acwrLabel: titleCase(acwrStatus) || '—',
+    acuteLoad: d[prefix + 'acuteTrainingLoadDTO_dailyTrainingLoadAcute'] || '—',
+    chronicLoad: d[prefix + 'acuteTrainingLoadDTO_dailyTrainingLoadChronic'] || '—',
+    aerobicLow: d[Object.keys(d).find(k => k.includes('monthlyLoadAerobicLow') && !k.includes('Target'))] || 0,
+    aerobicHigh: d[Object.keys(d).find(k => k.includes('monthlyLoadAerobicHigh') && !k.includes('Target'))] || 0,
+    anaerobic: d[Object.keys(d).find(k => k.includes('monthlyLoadAnaerobic') && !k.includes('Target'))] || 0,
+    vo2max: d['mostRecentVO2Max_generic_vo2MaxValue'] || '—',
+    vo2maxPrecise: d['mostRecentVO2Max_generic_vo2MaxPreciseValue'] || ''
+  };
+}
 
 /* ── load ── */
 async function loadAll() {
   try {
-    const res = await fetch(DATA_URL + '?t=' + Date.now());
-    if (!res.ok) throw new Error('data file not found (' + res.status + ')');
-    const json = await res.json();
-    D.activities = json.activities || [];
-    D.sleep = json.sleep || [];
-    D.hrv = json.hrv || [];
-    D.trainingStatus = json.trainingStatus || null;
+    const results = await Promise.all(FILES.map(f =>
+      fetch(f + '?t=' + Date.now()).then(r => r.ok ? r.text() : '').then(t => t ? parseCSV(t) : []).catch(() => [])
+    ));
+    D.activities = normalizeActivities(results[0]);
+    D.sleep = normalizeSleep(results[1]);
+    D.hrv = normalizeHRV(results[2]);
 
+    try {
+      const tsRes = await fetch(TRAINING_STATUS_FILE + '?t=' + Date.now());
+      D.trainingStatus = tsRes.ok ? normalizeTrainingStatus(await tsRes.json()) : null;
+    } catch (e) { D.trainingStatus = null; }
+
+    if (!D.activities.length && !D.sleep.length) {
+      document.getElementById('statusMsg').textContent = 'No data found. Check your GitHub Actions workflow has run and the CSVs exist in the repo root.';
+      return;
+    }
     document.getElementById('statusMsg').style.display = 'none';
     document.getElementById('mainContent').style.display = '';
-    if (json.updated) {
-      const d = new Date(json.updated);
-      document.getElementById('updatedLabel').textContent = 'Last synced: ' + d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}) + ' at ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    } else {
-      document.getElementById('updatedLabel').textContent = 'Last synced: unknown';
-    }
+    document.getElementById('updatedLabel').textContent = 'Data loaded';
     renderMetrics();
     showTab('activities');
   } catch (e) {
-    document.getElementById('statusMsg').textContent = 'Error loading data: ' + e.message + ' — check your GitHub Action has run and data/latest.json exists.';
+    document.getElementById('statusMsg').textContent = 'Error loading data: ' + e.message;
   }
 }
 
