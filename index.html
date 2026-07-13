@@ -196,16 +196,12 @@
 </div>
 
 <script>
-/* ============================================================
-   DATA SOURCE
-   Point this at the raw JSON your GitHub Action publishes.
-   Simplest setup: the Action commits data/latest.json into THIS
-   same public repo, so this can just be a relative path.
-   If your data lives in a separate repo, use the raw.githubusercontent
-   URL instead, e.g.:
-   const DATA_URL = 'https://raw.githubusercontent.com/<you>/<data-repo>/main/data/latest.json';
-   ============================================================ */
-const DATA_URL = 'data/latest.json';
+const GH = 'https://raw.githubusercontent.com/123KingKarl123/garmin-data-xK9mP2qL7vR4nJ8w/main/';
+const FILES = ['activities.csv','daily_summaries.csv','sleep.csv','hrv.csv','resting_heart_rate.csv','stress.csv'];
+let D = {};
+let days = 30;
+let curTab = 'activities';
+let chart = null;
 
 /* ============================================================
    RACE CONFIG — edit this to match your race
