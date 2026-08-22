@@ -277,20 +277,20 @@ const chesterWeeks = [
     mkDay(addDays(wk(8),3), 'bmx', 'Tempo', 'Tempo run \u2014 9km', '9km at tempo effort.', 9, ['9km tempo']),
     mkDay(addDays(wk(8),5), 'bz2', 'Long Run', 'Long run \u2014 23km', '23km steady long run.', 23, ['23km long'])
   ]},
-  { label: `Peak Phase \u2014 Week 10 \u2014 ${weekRangeLabel(wk(9))}`, phase: 'Peak Phase', days: [
+  { label: `Peak Phase \u2014 Week 10 (Peak) \u2014 ${weekRangeLabel(wk(9))}`, phase: 'Peak Phase', days: [
     mkDay(wk(9), 'bz2', 'Easy', 'Easy run \u2014 7km', '7km easy pace.', 7, ['7km easy']),
-    mkDay(addDays(wk(9),3), 'bz2', 'Steady', 'Run \u2014 10km', '10km steady effort.', 10, ['10km steady']),
-    mkDay(addDays(wk(9),5), 'bz2', 'Long Run', 'Long run \u2014 24km', '24km steady long run.', 24, ['24km long'])
+    mkDay(addDays(wk(9),3), 'bmx', 'Goal Pace', '10km \u2014 5km at goal pace', '10km total including 5km at goal race pace.', 10, ['5km easy','5km @ goal pace']),
+    mkDay(addDays(wk(9),5), 'bz2', 'Long Run', 'Long run \u2014 24km', '24km \u2014 peak long run of the block.', 24, ['24km long'], 'Peak week \u2014 highest volume before taper begins.')
   ]},
-  { label: `Peak Phase \u2014 Week 11 (Peak) \u2014 ${weekRangeLabel(wk(10))}`, phase: 'Peak Phase', days: [
-    mkDay(wk(10), 'bz2', 'Easy', 'Easy run \u2014 7km', '7km easy pace.', 7, ['7km easy']),
-    mkDay(addDays(wk(10),3), 'bmx', 'Goal Pace', '10km \u2014 5km at goal pace', '10km total including 5km at goal race pace.', 10, ['5km easy','5km @ goal pace']),
-    mkDay(addDays(wk(10),5), 'bz2', 'Long Run', 'Long run \u2014 26km', '26km \u2014 biggest long run of the block.', 26, ['26km long'], 'Peak week \u2014 highest volume before taper begins.')
+  { label: `Taper \u2014 Week 11 \u2014 ${weekRangeLabel(wk(10))}`, phase: 'Taper', days: [
+    mkDay(wk(10), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace.', 6, ['6km easy']),
+    mkDay(addDays(wk(10),3), 'bz2', 'Steady', 'Run \u2014 7km', '7km steady effort.', 7, ['7km steady']),
+    mkDay(addDays(wk(10),5), 'bz2', 'Long Run', 'Long run \u2014 20km', '20km \u2014 volume easing into taper.', 20, ['20km long'])
   ]},
   { label: `Taper \u2014 Week 12 \u2014 ${weekRangeLabel(wk(11))}`, phase: 'Taper', days: [
-    mkDay(wk(11), 'bz2', 'Easy', 'Easy run \u2014 6km', '6km easy pace.', 6, ['6km easy']),
-    mkDay(addDays(wk(11),3), 'bz2', 'Steady', 'Run \u2014 7km', '7km steady effort.', 7, ['7km steady']),
-    mkDay(addDays(wk(11),5), 'bz2', 'Long Run', 'Long run \u2014 18km', '18km \u2014 volume dropping into taper.', 18, ['18km long'])
+    mkDay(wk(11), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace.', 5, ['5km easy']),
+    mkDay(addDays(wk(11),3), 'bz2', 'Steady', 'Run \u2014 6km', '6km steady effort.', 6, ['6km steady']),
+    mkDay(addDays(wk(11),5), 'bz2', 'Long Run', 'Long run \u2014 14km', '14km \u2014 volume dropping further into taper.', 14, ['14km long'])
   ]},
   { label: `Race Week \u2014 ${weekRangeLabel(wk(12))}`, phase: 'Race Week', days: [
     mkDay(wk(12), 'bz2', 'Easy', 'Easy run \u2014 5km', '5km easy pace, shake the legs out.', 5, ['5km easy']),
