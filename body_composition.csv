@@ -1,4 +1,4 @@
-bodyWater,sourceType,bmi,date,calendarDate,boneMass,physiqueRating,visceralFat,weightDelta,samplePk,muscleMass,timestampGMT,weight,metabolicAge,bodyFat
-,MANUAL,,1787472301000,2026-08-23,,,,,1787468701836,,1787468701000,64900.0,,
-,CHANGE_LOG,,1784580027000,2026-07-20,,,,,1784576600721,,1784576427000,66000.0,,
-,USER_SETTING,,1783925254618,2026-07-13,,,,,1783921654703,,1783921654618,65500.0,,
+timestampGMT,muscleMass,metabolicAge,calendarDate,boneMass,bodyFat,bmi,weight,date,visceralFat,samplePk,bodyWater,weightDelta,sourceType,physiqueRating
+1787468701000,,,2026-08-23,,,,64900.0,1787472301000,,1787468701836,,,MANUAL,
+1784576427000,,,2026-07-20,,,,66000.0,1784580027000,,1784576600721,,,CHANGE_LOG,
+1783921654618,,,2026-07-13,,,,65500.0,1783925254618,,1783921654703,,,USER_SETTING,
