@@ -1,2 +1,2 @@
-weight,sourceType,date,physiqueRating,calendarDate,bodyWater,weightDelta,visceralFat,bmi,boneMass,samplePk,muscleMass,bodyFat,timestampGMT,metabolicAge
-66900.0,MANUAL,1791757672422,,2026-10-11,,,,,,1791754080625,,,1791754072422,
+calendarDate,sourceType,date,bmi,weightDelta,boneMass,muscleMass,bodyFat,samplePk,bodyWater,weight,visceralFat,metabolicAge,timestampGMT,physiqueRating
+2026-10-11,MANUAL,1791757672422,,,,,,1791754080625,,66900.0,,,1791754072422,
